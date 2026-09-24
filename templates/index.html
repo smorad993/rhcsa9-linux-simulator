@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linux Command Simulator & RHCSA 9 Master Guide</title>
+    <meta name="description" content="Interactive Linux command simulator and learning platform covering all 26 chapters and 260 essential commands from the Red Hat RHCSA 9 Cert Guide.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <!-- Top Navigation Bar -->
+    <header class="top-navbar">
+        <div class="brand-wrapper">
+            <div class="brand-logo">
+                <svg viewBox="0 0 24 24">
+                    <path d="M4 17l6-6-6-6m8 14h8" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                </svg>
+            </div>
+            <div class="brand-text">
+                <h1>Linux Command Simulator <span class="brand-badge">RHCSA 9</span></h1>
+                <p>Red Hat Certified System Administrator (EX200) Interactive Hub</p>
+            </div>
+        </div>
+
+        <div class="header-center-search">
+            <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="header-search-input" class="search-input-box" placeholder="Search 260 Linux commands... (Ctrl + K)">
+        </div>
+
+        <div class="header-stats">
+            <div class="stat-chip">
+                <span class="stat-chip-num">{{ stats.total_chapters }}</span>
+                <span class="stat-chip-label">RHCSA Chapters</span>
+            </div>
+            <div class="stat-chip">
+                <span class="stat-chip-num">{{ stats.total_commands }}</span>
+                <span class="stat-chip-label">Curated Commands</span>
+            </div>
+            <div class="stat-chip">
+                <span class="stat-chip-num">RHEL 9.2</span>
+                <span class="stat-chip-label">Target OS</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Application Container -->
+    <div class="app-container">
+        
+        <!-- Sidebar Navigation: 26 Chapters -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <span class="sidebar-title">RHCSA 9 Curriculum</span>
+                <span class="chapter-count-badge">26 Topics</span>
+            </div>
+
+            <div class="chapters-scroll-area">
+                {% set current_part = namespace(id=0) %}
+                {% for ch in chapters %}
+                    {% if ch.part_id != current_part.id %}
+                        {% set current_part.id = ch.part_id %}
+                        <div class="part-group">
+                            <div class="part-header">{{ ch.part_title }}</div>
+                    {% endif %}
+
+                    <button class="chapter-item-btn {% if ch.chapter_id == 1 %}active{% endif %}" 
+                            data-chapter-id="{{ ch.chapter_id }}" 
+                            onclick="selectChapter({{ ch.chapter_id }})">
+                        <span class="chapter-num-badge">Ch {{ ch.chapter_id }}</span>
+                        <span class="chapter-title-text">{{ ch.chapter_title }}</span>
+                    </button>
+
+                    {% if loop.last or chapters[loop.index0 + 1].part_id != current_part.id %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-stage">
+            
+            <!-- Chapter Hero Banner -->
+            <section class="chapter-hero-banner">
+                <div class="banner-meta">
+                    <span id="hero-part-tag" class="part-tag">{{ active_chapter.part_title }}</span>
+                    <span id="hero-chapter-pill" class="chapter-id-pill">Chapter {{ active_chapter.chapter_id }} of 26</span>
+                </div>
+                <h2 id="hero-chapter-title">{{ active_chapter.chapter_title }}</h2>
+                <p id="hero-chapter-desc">{{ active_chapter.description }}</p>
+            </section>
+
+            <!-- Top 10 Commands Section -->
+            <section>
+                <div class="section-headline">
+                    <h3>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="2">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                        </svg>
+                        Top 10 Essential Commands
+                    </h3>
+                    <span class="headline-sub">Click any command to inspect syntax, flags, tips & run in terminal</span>
+                </div>
+
+                <div id="commands-grid" class="commands-grid">
+                    <!-- Populated dynamically via JavaScript -->
+                </div>
+            </section>
+
+            <!-- Dual Workspace: Inspector & Simulator Terminal -->
+            <div class="workspace-split">
+                
+                <!-- Left: Command Inspector Drawer -->
+                <div class="inspector-panel">
+                    <div class="panel-header">
+                        <h3>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="16" x2="12" y2="12"></line>
+                                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                            </svg>
+                            Command Inspector
+                        </h3>
+                        <span id="inspector-category-tag" class="cmd-category-tag">System Identification</span>
+                    </div>
+
+                    <div class="inspector-body">
+                        <!-- Command Name & Actions -->
+                        <div class="inspector-title-row">
+                            <div id="inspector-cmd-name" class="inspector-cmd-name">hostnamectl</div>
+                            <div class="inspector-actions">
+                                <button id="run-in-simulator-btn" class="action-btn btn-primary" title="Execute command in live simulator">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                                    </svg>
+                                    Run in Simulator
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Synopsis Box -->
+                        <div class="synopsis-box">
+                            <span id="inspector-synopsis">hostnamectl [OPTIONS...] COMMAND ...</span>
+                            <button id="copy-synopsis-btn" class="copy-mini-btn" title="Copy Synopsis">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <!-- Detailed Description -->
+                        <div class="desc-box">
+                            <p id="inspector-detailed-desc" style="font-size:0.88rem; color:var(--text-secondary); line-height:1.6;">
+                                Control and query the system hostname and related settings.
+                            </p>
+                        </div>
+
+                        <!-- Common Flags & Options -->
+                        <div class="flags-section">
+                            <h4>Essential Flags & Options</h4>
+                            <div id="inspector-flags-list" class="flags-list">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+
+                        <!-- RHCSA Exam Tips Alert -->
+                        <div class="rhcsa-tips-box">
+                            <h4>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                                </svg>
+                                RHCSA EX200 Exam Best Practices & Tips
+                            </h4>
+                            <ul id="inspector-tips-list" class="tips-list">
+                                <!-- Populated dynamically -->
+                            </ul>
+                        </div>
+
+                        <!-- Realistic Output Preview -->
+                        <div class="output-preview-section">
+                            <h4>Realistic Output Preview</h4>
+                            <pre id="inspector-output-preview" class="terminal-snippet"></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Interactive Web Terminal Console -->
+                <div class="terminal-panel">
+                    <div class="terminal-header-bar">
+                        <div class="terminal-window-controls">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                        </div>
+                        <div class="terminal-tab-title">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="4 17 10 11 4 5"></polyline>
+                                <line x1="12" y1="19" x2="20" y2="19"></line>
+                            </svg>
+                            bash &mdash; rhel9-node1 (tty1)
+                        </div>
+                        <div class="terminal-actions-bar">
+                            <button id="clear-term-btn" class="term-action-btn" title="Clear Terminal (Ctrl + L)">Clear</button>
+                            <button id="restart-term-btn" class="term-action-btn" title="Restart Session">Reset</button>
+                        </div>
+                    </div>
+
+                    <div id="terminal-screen" class="terminal-screen">
+                        <div class="term-banner-line">Red Hat Enterprise Linux 9.2 (Plow) - Linux Command Simulator</div>
+                        <div class="term-help-line">Tip: Click 'Run in Simulator' on any command card, or type directly below (history with ↑/↓ arrows).</div>
+                        
+                        <div id="terminal-history-log" class="terminal-history-log">
+                            <!-- Command log appended here -->
+                        </div>
+
+                        <div class="terminal-input-row">
+                            <span id="active-prompt" class="active-prompt">[root@rhel9-node1 ~]#</span>
+                            <input type="text" id="term-input" class="term-input" autocomplete="off" spellcheck="false" placeholder="Type a command (e.g. hostnamectl status, ip addr, ls -la)..." autofocus>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Search Modal Overlay -->
+    <div id="search-modal" class="search-modal-backdrop">
+        <div class="search-modal-window">
+            <div class="modal-search-bar">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" id="modal-search-input" class="modal-input" placeholder="Search commands, flags, or RHCSA topics..." autocomplete="off">
+            </div>
+            <div id="modal-results-list" class="search-results-list">
+                <!-- Search results injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Script -->
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
