@@ -44,7 +44,33 @@ The Flask server runs as a service. Open your browser directly at:
 
 *(Port `5050` was chosen to avoid macOS ControlCenter AirPlay conflicts on port `5000`).*
 
-### Manual Launch Instructions
+### Option A: Run with Docker Compose (Recommended)
+You can run the entire simulator in an isolated container without installing Python or dependencies:
+```bash
+# Clone the repository
+git clone https://github.com/smorad993/rhcsa9-linux-simulator.git
+cd rhcsa9-linux-simulator
+
+# Start container in detached mode
+docker compose up -d
+
+# View real-time container logs
+docker compose logs -f
+
+# Stop container
+docker compose down
+```
+
+### Option B: Run directly with Docker
+```bash
+# Build the Docker image
+docker build -t rhcsa9-linux-simulator .
+
+# Run the container
+docker run -d -p 5050:5050 --name rhcsa9-sim rhcsa9-linux-simulator
+```
+
+### Option C: Manual Python Launch
 ```bash
 # Navigate to the project directory
 cd /Users/moradi/Documents/Mylab/Topics/07-Automation-Scripts/Linux-command
@@ -52,7 +78,7 @@ cd /Users/moradi/Documents/Mylab/Topics/07-Automation-Scripts/Linux-command
 # Activate virtual environment
 source venv/bin/activate
 
-# Install dependencies (if needed)
+# Install dependencies
 pip install -r requirements.txt
 
 # Run the test suite

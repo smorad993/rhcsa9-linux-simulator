@@ -47,7 +47,33 @@
 
 *(پورت `5050` برای جلوگیری از تداخل با سرویس AirPlay / ControlCenter در سیستم‌عامل مک در نظر گرفته شده است).*
 
-### دستورات راه‌اندازی دستی در آینده
+### روش اول: اجرا با Docker Compose (روش پیشنهادی و سریع)
+می‌توانید کل پروژه را بدون نیاز به نصب پایتون در قالب یک کانتینر مجزا اجرا کنید:
+```bash
+# کلون کردن پروژه از گیت‌هاب
+git clone https://github.com/smorad993/rhcsa9-linux-simulator.git
+cd rhcsa9-linux-simulator
+
+# اجرای کانتینر در پس‌زمینه
+docker compose up -d
+
+# مشاهده لاگ‌های زنده کانتینر
+docker compose logs -f
+
+# متوقف‌سازی کانتینر
+docker compose down
+```
+
+### روش دوم: اجرا مستقیم با دستور Docker
+```bash
+# بیلد ایمیج داکر
+docker build -t rhcsa9-linux-simulator .
+
+# اجرای کانتینر
+docker run -d -p 5050:5050 --name rhcsa9-sim rhcsa9-linux-simulator
+```
+
+### روش سوم: راه‌اندازی دستی با پایتون
 ```bash
 # ورود به پوشه پروژه
 cd /Users/moradi/Documents/Mylab/Topics/07-Automation-Scripts/Linux-command
@@ -55,7 +81,7 @@ cd /Users/moradi/Documents/Mylab/Topics/07-Automation-Scripts/Linux-command
 # فعال‌سازی محیط مجازی پایتون
 source venv/bin/activate
 
-# نصب وابستگی‌ها (در صورت نیاز)
+# نصب وابستگی‌ها
 pip install -r requirements.txt
 
 # اجرای تست‌های سامانه

@@ -1,0 +1,18 @@
+services:
+  linux-simulator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: smorad993/rhcsa9-linux-simulator:latest
+    container_name: rhcsa9-linux-simulator
+    restart: unless-stopped
+    ports:
+      - "5050:5050"
+    environment:
+      - PORT=5050
+      - FLASK_ENV=production
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5050/api/stats"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
