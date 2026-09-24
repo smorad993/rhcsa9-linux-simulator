@@ -22,7 +22,7 @@ pip install -r requirements.txt
 # Run the Flask web application
 python3 app.py
 ```
-Then open your browser at: **`http://localhost:5000`** (or `http://127.0.0.1:5000`).
+Then open your browser at: **`http://localhost:5050`** (or `http://127.0.0.1:5050`).
 
 ---
 
