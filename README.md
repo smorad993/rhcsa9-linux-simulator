@@ -1,6 +1,8 @@
 # Linux Command Simulator & RHCSA 9 Learning Hub
 ## Architecture Plan, C4 Diagrams (L1–L4), Flowcharts & Curriculum Breakdown
 
+[🇺🇸 English](README.md) | [🇮🇷 نسخه فارسی (Persian)](README_FA.md)
+
 The **Linux Command Simulator & RHCSA 9 Learning Hub** is a full-featured Flask web application and interactive terminal simulator covering all 26 chapters from the *Red Hat RHCSA 9 Cert Guide (EX200)*, featuring the **Top 10 essential Linux commands per chapter** (260 commands total).
 
 📁 **Project Location:**  
