@@ -1,32 +1,68 @@
 # Linux Command Simulator & RHCSA 9 Learning Hub
 ## Architecture Plan, C4 Diagrams (L1–L4), Flowcharts & Curriculum Breakdown
 
-This project is a Flask-powered **Linux Simulator and Learning Hub** covering all 26 chapters from the *Red Hat RHCSA 9 Cert Guide (EX200)*, featuring the **Top 10 essential Linux commands per chapter** (260 commands total).
+The **Linux Command Simulator & RHCSA 9 Learning Hub** is a full-featured Flask web application and interactive terminal simulator covering all 26 chapters from the *Red Hat RHCSA 9 Cert Guide (EX200)*, featuring the **Top 10 essential Linux commands per chapter** (260 commands total).
+
+📁 **Project Location:**  
+`/Users/moradi/Documents/Mylab/Topics/07-Automation-Scripts/Linux-command`
 
 ---
 
-## 1. Quick Start
+## 1. What Was Built & Delivered
 
-### Prerequisites
-- Python 3.8+
-- Flask
+### 📦 Git Repository Initialized
+- Initialized local Git repository in `/Users/moradi/Documents/Mylab/Topics/07-Automation-Scripts/Linux-command`.
+- Initial commits containing complete application source code, dataset catalog, test suite, and configuration.
 
-### Installation & Run
+### 📚 Complete 26-Chapter Curriculum & 260 Curated Commands
+- **Part I: Basic System Management (Ch 1–8):** `hostnamectl`, `timedatectl`, `localectl`, `uname`, `lsblk`, `fdisk`, `man`, `ls`, `grep`, `ssh`, `useradd`, `chmod`, `setfacl`, `nmcli`, `ip`, `ss`, etc.
+- **Part II: Operating Running Systems (Ch 9–15):** `dnf`, `rpm`, `ps aux`, `top`, `kill`, `systemctl`, `crontab`, `journalctl`, `mkfs.xfs`, `mount`, `blkid`, `lvextend`, `stratis`, etc.
+- **Part III: Advanced Administration (Ch 16–19):** `uname -r`, `lsmod`, `modprobe`, `sysctl`, `grub2-mkconfig`, `systemctl set-default`, `strace`, `lsof`, `tcpdump`, `bash` scripting, etc.
+- **Part IV: Managing Network Services (Ch 20–26):** SSH hardening, Apache `httpd`, SELinux (`sestatus`, `semanage fcontext`, `restorecon`, `setsebool`), `firewall-cmd`, NFS/CIFS (`showmount`, `autofs`), Chrony time sync, and Podman containers (`podman run`, `podman generate systemd`).
+
+### 🖥️ Modern Web GUI & Interactive Terminal
+- **Dark Glassmorphic UI:** Styled with Vanilla CSS, Outfit and JetBrains Mono typography, status badges, and subtle glow animations.
+- **26-Topic Sidebar:** Structured into Parts I–IV with instant topic switching.
+- **Top 10 Commands Grid:** Interactive badges and cards displaying category, command name, and brief synopsis.
+- **Command Inspector Drawer:** Displays full command syntax with copy button, detailed explanation, flags table, practical **RHCSA EX200 Exam Tips & Gotchas**, and realistic output preview.
+- **Live Web Terminal:** Features a colorized prompt (`[root@rhel9-node1 ~]#`), interactive typing, command history (`↑` / `↓` arrows), tab completion, error emulation, and a **"▶ Run in Simulator"** one-click action button.
+- **Instant Search Modal:** Triggered with `Ctrl + K` / `Cmd + K` to search across all 260 commands, flags, and descriptions.
+
+### 🧪 Testing & Quality Assurance
+- Self-verification test suite (`test_app.py`) with 100% pass rate (**6/6 tests passing**).
+- Verifies all 26 chapters, 260 command structures, REST API endpoints, and virtual shell simulation output.
+
+---
+
+## 2. Quick Start & How to Access
+
+### Access the Running Application
+The Flask server runs as a service. Open your browser directly at:
+👉 **[http://localhost:5050](http://localhost:5050)** (or `http://127.0.0.1:5050`)
+
+*(Port `5050` was chosen to avoid macOS ControlCenter AirPlay conflicts on port `5000`).*
+
+### Manual Launch Instructions
 ```bash
 # Navigate to the project directory
 cd /Users/moradi/Documents/Mylab/Topics/07-Automation-Scripts/Linux-command
 
-# Install dependencies
+# Activate virtual environment
+source venv/bin/activate
+
+# Install dependencies (if needed)
 pip install -r requirements.txt
 
-# Run the Flask web application
+# Run the test suite
+python3 test_app.py
+
+# Launch the Flask application
 python3 app.py
 ```
-Then open your browser at: **`http://localhost:5050`** (or `http://127.0.0.1:5050`).
 
 ---
 
-## 2. System Architecture & C4 Model
+## 3. System Architecture & C4 Model
 
 ```
 Level 1: System Context  ---> Who uses it and what systems it touches
@@ -163,7 +199,7 @@ classDiagram
 
 ---
 
-## 3. Operational Flowchart
+## 4. Operational Flowchart
 
 ```mermaid
 flowchart TD
@@ -198,7 +234,7 @@ flowchart TD
 
 ---
 
-## 4. 26-Chapter Section Breakdown & 260 Commands
+## 5. 26-Chapter Section Breakdown & 260 Commands
 
 ### Part I: Performing Basic System Management Tasks
 
@@ -249,7 +285,7 @@ flowchart TD
 
 ---
 
-## 5. Project Directory Structure
+## 6. Project Directory Structure
 ```
 Linux-command/
 ├── README.md                      # Architecture, C4 diagrams, and curriculum
